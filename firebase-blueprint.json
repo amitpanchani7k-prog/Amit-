@@ -1,0 +1,96 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account information and channel details.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string", "description": "User's display name" },
+        "email": { "type": "string", "format": "email", "description": "User's email address" },
+        "photoURL": { "type": "string", "description": "User's profile picture URL" },
+        "subscriberCount": { "type": "number", "description": "Number of subscribers" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Account creation timestamp" }
+      },
+      "required": ["uid", "displayName", "email"]
+    },
+    "Video": {
+      "title": "Video",
+      "description": "Metadata for uploaded videos (long and shorts).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Video unique ID" },
+        "title": { "type": "string", "description": "Video title" },
+        "description": { "type": "string", "description": "Video description" },
+        "videoUrl": { "type": "string", "description": "URL to the video file" },
+        "thumbnailUrl": { "type": "string", "description": "URL to the video thumbnail" },
+        "authorId": { "type": "string", "description": "UID of the user who uploaded the video" },
+        "authorName": { "type": "string", "description": "Name of the author" },
+        "authorPhoto": { "type": "string", "description": "Photo of the author" },
+        "type": { "type": "string", "enum": ["long", "short"], "description": "Type of video" },
+        "likesCount": { "type": "number", "description": "Number of likes" },
+        "viewsCount": { "type": "number", "description": "Number of views" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Upload timestamp" }
+      },
+      "required": ["title", "videoUrl", "authorId", "type"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "User comments on videos.",
+      "type": "object",
+      "properties": {
+        "videoId": { "type": "string", "description": "ID of the video being commented on" },
+        "authorId": { "type": "string", "description": "UID of the commenter" },
+        "authorName": { "type": "string", "description": "Name of the commenter" },
+        "authorPhoto": { "type": "string", "description": "Photo of the commenter" },
+        "text": { "type": "string", "description": "Comment content" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Comment timestamp" }
+      },
+      "required": ["videoId", "authorId", "text"]
+    },
+    "Subscription": {
+      "title": "Subscription",
+      "description": "Tracks which users follow which channels.",
+      "type": "object",
+      "properties": {
+        "subscriberId": { "type": "string", "description": "UID of the user who is subscribing" },
+        "channelId": { "type": "string", "description": "UID of the channel being subscribed to" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Subscription timestamp" }
+      },
+      "required": ["subscriberId", "channelId"]
+    },
+    "Like": {
+      "title": "Like",
+      "description": "Tracks which users liked which videos.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "UID of the user who liked the video" },
+        "videoId": { "type": "string", "description": "ID of the video liked" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Like timestamp" }
+      },
+      "required": ["userId", "videoId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Stores user profile and channel information."
+    },
+    "/videos/{videoId}": {
+      "schema": "Video",
+      "description": "Stores video metadata."
+    },
+    "/videos/{videoId}/comments/{commentId}": {
+      "schema": "Comment",
+      "description": "Stores comments for a specific video."
+    },
+    "/subscriptions/{subId}": {
+      "schema": "Subscription",
+      "description": "Stores subscription relationships."
+    },
+    "/likes/{likeId}": {
+      "schema": "Like",
+      "description": "Stores video like relationships."
+    }
+  }
+}
